@@ -1,5 +1,5 @@
 [package]
-name = "rust-captcha"
+name = "rust_captcha"
 version = "0.0.1"
 authors = ["daniele <git.daniele@gmail.com>"]
 
@@ -16,3 +16,8 @@ hyper = "0.10.10"
 time = "0.1.37"
 uuid = { version = "0.5.0", features = ["v4"] }
 captcha = { git = "https://github.com/daniel-e/captcha.git" }
+
+
+[[bin]]
+name = "rust_captcha"
+path = "src/main.rs"

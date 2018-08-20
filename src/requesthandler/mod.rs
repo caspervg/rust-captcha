@@ -1,6 +1,6 @@
 use rustful::{Handler, Context, Response, StatusCode};
 use methods::{CaptchaError, captcha_new, captcha_solution};
-use rustful::header::ContentType;
+use rustful::header::{ContentType, AccessControlAllowOrigin};
 use hyper::mime::{Mime, TopLevel, SubLevel, Attr, Value};
 
 pub enum CaptchaMethod {
@@ -31,6 +31,9 @@ impl Handler for RequestHandler {
             Ok(body) => {
                 res.headers_mut().set(
                     ContentType(Mime(TopLevel::Application, SubLevel::Json, vec![(Attr::Charset, Value::Utf8)]))
+                );
+                res.headers_mut().set(
+                    AccessControlAllowOrigin::Any
                 );
                 res.send(body.as_str());
             }

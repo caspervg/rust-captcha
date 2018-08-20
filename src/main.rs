@@ -11,8 +11,6 @@ use std::env;
 
 use rust_captcha::requesthandler::{RequestHandler, CaptchaMethod};
 
-const PORT: u16 = 8080;
-
 fn precondition_checks() -> bool {
     match env::var("REDIS_HOST") {
         Err(_) => {
@@ -24,14 +22,19 @@ fn precondition_checks() -> bool {
 }
 
 fn main() {
-    env_logger::init().expect("initializing logger failed");
+    env_logger::init().expect("Initializing logger failed");
+
+    let port: u16 = env::var("HTTP_PORT")
+        .unwrap_or("8080".to_string())
+        .parse()
+        .expect("Invalid HTTP port number given.");
 
     if !precondition_checks() {
         error!("Failed to start server.");
         return;
     }
 
-    info!("Starting service on port {} ...", PORT);
+    info!("Starting service on port {} ...", port);
 
     let ret = Server {
         handlers: insert_routes! {
@@ -40,7 +43,7 @@ fn main() {
                 "/solution/:id/:solution"          => Post: RequestHandler::new(CaptchaMethod::Solution)
             }
         },
-        host: PORT.into(),
+        host: port.into(),
         ..Server::default()
     }.run();
 
